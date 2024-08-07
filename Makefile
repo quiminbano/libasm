@@ -6,7 +6,7 @@
 #    By: corellan <corellan@student.hive.fi>        +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/08/07 18:35:00 by corellan          #+#    #+#              #
-#    Updated: 2024/08/07 18:35:03 by corellan         ###   ########.fr        #
+#    Updated: 2024/08/07 18:37:06 by corellan         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -14,7 +14,7 @@ NAME = libasm.a
 
 SRC = ft_strlen.s ft_strcpy.s
 
-OBJ = $(patsubst %.c, obj/%.o, $(SRC))
+OBJ = $(patsubst %.s, obj/%.o, $(SRC))
 
 OS = $(shell uname -s)
 
