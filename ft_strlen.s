@@ -1,17 +1,26 @@
+%ifidn __OUTPUT_FORMAT__, "macho64"
+	%define FT_STRLEN _ft_strlen
+	%define LOOPS _loops
+	%define RETURN _return
+%else
+	%define FT_STRLEN ft_strlen
+	%define LOOPS loops
+	%define RETURN return
+%endif
 section .text
-	global ft_strlen
+	global FT_STRLEN
 
-ft_strlen:
+FT_STRLEN:
 	xor rcx, rcx
 
-loop:
+LOOPS:
 	mov al, [rdi]
 	cmp al, 0
 	je return
 	inc rcx
 	inc rdi
-	jmp loop
+	jmp LOOPS
 
-return:
+RETURN:
 	mov rax, rcx
 	ret
