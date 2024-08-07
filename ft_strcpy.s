@@ -22,6 +22,6 @@ LOOP:
 	jmp LOOP
 
 RETURN:
-	movsb
+	movs [rdi], [rsi] 
 	mov rax, rcx
 	ret
