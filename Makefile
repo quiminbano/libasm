@@ -32,9 +32,9 @@ all: $(NAME)
 $(NAME): $(OBJ)
 	$(LIB) $(NAME) $(OBJ)
 
-obj/%.o: %.s:
+obj/%.o: %.s
 	mkdir -p obj/
-	$(NASM) $<
+	$(NASM) $< -o $@
 
 clean:
 	rm -f $(OBJ)
