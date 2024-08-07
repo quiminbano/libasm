@@ -1,4 +1,4 @@
-%ifidn __OUTPUT_FORMAT__, "macho64"
+%ifidn __OUTPUT_FORMAT__, macho64
 	%define FT_STRLEN _ft_strlen
 	%define LOOPS _loops
 	%define RETURN _return
@@ -17,7 +17,7 @@ FT_STRLEN:
 LOOPS:
 	mov al, [rdi]
 	cmp al, 0
-	je return
+	je RETURN
 	inc rcx
 	inc rdi
 	jmp LOOPS

@@ -6,7 +6,7 @@
 #    By: corellan <corellan@student.hive.fi>        +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/08/07 18:35:00 by corellan          #+#    #+#              #
-#    Updated: 2024/08/07 18:37:06 by corellan         ###   ########.fr        #
+#    Updated: 2024/08/07 19:13:00 by corellan         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -20,10 +20,10 @@ OS = $(shell uname -s)
 
 LIB = ar -rcs
 
-ifeq ($(OS), Linux)
-	NASM = nasm -f elf64
-else
+ifeq ($(OS), Darwin)
 	NASM = nasm -f macho64
+else
+	NASM = nasm -f elf64
 endif
 
 all: $(NAME)
