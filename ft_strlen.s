@@ -7,6 +7,7 @@
 	%define LOOPS loops
 	%define RETURN return
 %endif
+
 section .text
 	global FT_STRLEN
 
