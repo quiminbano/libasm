@@ -8,7 +8,7 @@ loop:
 	mov al, [rsi]
 	movsb
 	cmp al, 0
-	je RETURN
+	je return
 	jmp loop
 
 return:
