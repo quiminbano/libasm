@@ -6,7 +6,7 @@
 #    By: corellan <corellan@student.hive.fi>        +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/08/07 18:35:00 by corellan          #+#    #+#              #
-#    Updated: 2024/08/08 15:15:02 by corellan         ###   ########.fr        #
+#    Updated: 2024/08/08 15:36:34 by corellan         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -16,13 +16,13 @@ OS = $(shell uname -s)
 
 ifeq ($(OS), Darwin)
 	FOLDER = macOS/
-	SRC = $(addprefix $(FOLDER), ft_strlen.s ft_strcpy.s)
 	NASM = nasm -f macho64
 else
 	FOLDER = linux/
-	SRC = $(addprefix $(FOLDER), ft_strlen.s ft_strcpy.s)
 	NASM = nasm -f elf64
 endif
+
+SRC = $(addprefix $(FOLDER), ft_strlen.s ft_strcpy.s ft_strcmp.s)
 
 OBJ = $(patsubst $(FOLDER)%.s, obj/%.o, $(SRC))
 
