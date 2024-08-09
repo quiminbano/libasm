@@ -7,12 +7,14 @@ section .text
 _ft_read:
 	mov rax, SYS_READ
 	syscall
-	jc _error
+	cmp rax, 0
+	jl _error
 
 _success:
 	ret
 
 _error:
+	neg rax
 	mov rbx, rax
 	call ___error
 	test rax, rax

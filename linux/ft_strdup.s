@@ -11,7 +11,7 @@ ft_strdup:
 	mov rsi, rdi
 	mov rdi, rax
 	xor rax, rax
-	call malloc
+	call malloc wrt ..plt
 	test rax, rax
 	jz malloc_protection
 	mov rdi, rax
@@ -22,3 +22,5 @@ ft_strdup:
 malloc_protection:
 	xor rax, rax
 	ret
+
+section .note.GNU-stack

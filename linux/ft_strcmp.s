@@ -19,3 +19,5 @@ return:
 	movzx ebx, BYTE[rsi]
 	sub eax, ebx
 	ret
+
+section .note.GNU-stack

@@ -14,3 +14,5 @@ loop:
 return:
 	mov rax, rcx
 	ret
+
+section .note.GNU-stack

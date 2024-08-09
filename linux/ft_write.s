@@ -7,14 +7,16 @@ section .text
 ft_write:
 	mov rax, SYS_WRITE
 	syscall
-	jc error
+	cmp rax, 0
+	jl error
 
 success:
 	ret
 
 error:
+	neg rax
 	mov rbx, rax
-	call __errno_location
+	call __errno_location wrt ..plt
 	test rax, rax
 	jz error_protection
 	mov [rax], rbx
