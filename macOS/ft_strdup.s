@@ -12,7 +12,7 @@ _ft_strdup:
 	xor rax, rax
 	call _malloc
 	test rax, rax
-	jz _malloc_protection:
+	jz _malloc_protection
 	mov rdi, rax
 	xor rax, rax
 	call _ft_strcpy
