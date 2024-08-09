@@ -6,7 +6,7 @@
 #    By: corellan <corellan@student.hive.fi>        +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/08/07 18:35:00 by corellan          #+#    #+#              #
-#    Updated: 2024/08/08 15:36:34 by corellan         ###   ########.fr        #
+#    Updated: 2024/08/09 17:28:40 by corellan         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -22,7 +22,7 @@ else
 	NASM = nasm -f elf64
 endif
 
-SRC = $(addprefix $(FOLDER), ft_strlen.s ft_strcpy.s ft_strcmp.s)
+SRC = $(addprefix $(FOLDER), ft_strlen.s ft_strcpy.s ft_strcmp.s ft_write.s)
 
 OBJ = $(patsubst $(FOLDER)%.s, obj/%.o, $(SRC))
 
