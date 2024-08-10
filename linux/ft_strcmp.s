@@ -3,8 +3,6 @@ section .text
 
 ft_strcmp:
 	xor rcx, rcx
-	xor rax, rax
-	xor rbx, rbx
 
 loop_cmp:
 	mov al, [rdi + rcx]
@@ -22,8 +20,8 @@ return_cmp:
 	movzx eax, BYTE[rdi + rcx]
 	movzx ebx, BYTE[rsi + rcx]
 	sub eax, ebx
-	xor ecx, ecx
-	xor ebx, ebx
+	xor rcx, rcx
+	xor rbx, rbx
 	ret
 
 section .note.GNU-stack

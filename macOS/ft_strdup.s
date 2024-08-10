@@ -7,18 +7,19 @@ section .text
 _ft_strdup:
 	call _ft_strlen
 	inc rax
-	mov rsi, rdi
+	push rdi
 	mov rdi, rax
 	xor rax, rax
 	call _malloc
 	test rax, rax
-	jz _malloc_protection
+	jz _malloc_protection_dup
 	mov rdi, rax
 	xor rax, rax
+	pop rsi
 	call _ft_strcpy
 	ret
 
-_malloc_protection:
+_malloc_protection_dup:
 	xor rax, rax
 	ret
 

@@ -4,14 +4,14 @@ section .text
 _ft_strlen:
 	xor rcx, rcx
 
-_loop:
+_loop_len:
 	mov al, [rdi + rcx]
 	cmp al, 0
-	je _return
+	je _return_len
 	inc rcx
-	jmp _loop
+	jmp _loop_len
 
-_return:
+_return_len:
 	mov rax, rcx
 	xor rcx, rcx
 	ret

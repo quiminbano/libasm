@@ -8,21 +8,21 @@ ft_write:
 	mov rax, SYS_WRITE
 	syscall
 	cmp rax, 0
-	jl error
+	jl error_write
 
-success:
+success_write:
 	ret
 
-error:
+error_write:
 	neg rax
 	mov rbx, rax
 	call __errno_location wrt ..plt
 	test rax, rax
-	jz error_protection
+	jz error_protection_write
 	mov [rax], rbx
 	mov rax, -1
 	ret
 
-error_protection:
+error_protection_write:
 	xor rax, rax
 	ret

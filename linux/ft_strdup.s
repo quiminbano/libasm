@@ -5,7 +5,6 @@ section .text
 	extern malloc
 
 ft_strdup:
-	xor rax, rax
 	call ft_strlen
 	inc rax
 	push rdi
@@ -13,14 +12,14 @@ ft_strdup:
 	xor rax, rax
 	call malloc wrt ..plt
 	test rax, rax
-	jz malloc_protection
+	jz malloc_protection_dup
 	mov rdi, rax
 	xor rax, rax
 	pop rsi
 	call ft_strcpy
 	ret
 
-malloc_protection:
+malloc_protection_dup:
 	xor rax, rax
 	ret
 
