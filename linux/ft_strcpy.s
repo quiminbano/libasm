@@ -2,7 +2,8 @@ section .text
 	global ft_strcpy
 
 ft_strcpy:
-	mov rcx, rdi
+	push rdi
+	push rsi
 
 loop:
 	mov al, [rsi]
@@ -12,7 +13,9 @@ loop:
 	jmp loop
 
 return:
-	mov rax, rcx
+	pop rsi
+	pop rdi
+	mov rax, rdi
 	ret
 
 section .note.GNU-stack

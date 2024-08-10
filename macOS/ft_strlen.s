@@ -5,13 +5,13 @@ _ft_strlen:
 	xor rcx, rcx
 
 _loop:
-	mov al, [rdi]
+	mov al, [rdi + rcx]
 	cmp al, 0
 	je _return
 	inc rcx
-	inc rdi
 	jmp _loop
 
 _return:
 	mov rax, rcx
+	xor rcx, rcx
 	ret

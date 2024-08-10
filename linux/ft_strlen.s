@@ -4,16 +4,16 @@ section .text
 ft_strlen:
 	xor rcx, rcx
 
-loop:
-	mov al, [rdi]
+loop_len:
+	mov al, [rdi + rcx]
 	cmp al, 0
-	je return
+	je return_len
 	inc rcx
-	inc rdi
-	jmp loop
+	jmp loop_len
 
-return:
+return_len:
 	mov rax, rcx
+	xor rcx, rcx
 	ret
 
 section .note.GNU-stack

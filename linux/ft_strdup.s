@@ -8,7 +8,7 @@ ft_strdup:
 	xor rax, rax
 	call ft_strlen
 	inc rax
-	mov rsi, rdi
+	push rdi
 	mov rdi, rax
 	xor rax, rax
 	call malloc wrt ..plt
@@ -16,6 +16,7 @@ ft_strdup:
 	jz malloc_protection
 	mov rdi, rax
 	xor rax, rax
+	pop rsi
 	call ft_strcpy
 	ret
 
