@@ -5,14 +5,14 @@ ft_strcpy:
 	push rdi
 	push rsi
 
-loop:
+loop_cpy:
 	mov al, [rsi]
 	movsb
 	cmp al, 0
-	je return
-	jmp loop
+	je return_cpy
+	jmp loop_cpy
 
-return:
+return_cpy:
 	pop rsi
 	pop rdi
 	mov rax, rdi
