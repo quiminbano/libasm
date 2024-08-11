@@ -7,22 +7,23 @@ section .text
 _ft_write:
 	mov rax, SYS_WRITE
 	syscall
-	cmp rax, 0
-	jl _error_write
+	jc _error_write
 
 _success_write:
 	ret
 
 _error_write:
-	neg rax
-	mov rbx, rax
+	push rdi
+	mov rdi, rax
 	call ___error
 	test rax, rax
 	jz _error_protection_write
-	mov [rax], rbx
+	mov [rax], rdi
+	pop rdi
 	mov rax, -1
 	ret
 
 _error_protection_write:
+	pop rdi
 	xor rax, rax
 	ret

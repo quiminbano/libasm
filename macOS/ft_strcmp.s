@@ -3,23 +3,24 @@ section .text
 
 _ft_strcmp:
 	xor rcx, rcx
+	xor rdx, rdx
 
 _loop_cmp:
 	mov al, [rdi + rcx]
-	mov bl, [rsi + rcx]
+	mov dl, [rsi + rcx]
 	cmp al, 0
 	je _return_cmp
-	cmp bl, 0
+	cmp dl, 0
 	je _return_cmp
-	cmp al, bl
+	cmp al, dl
 	jne _return_cmp
 	inc rcx
 	jmp _loop_cmp
 
-_return:
-	movzx eax, BYTE[rdi + rcx]
-	movzx ebx, BYTE[rsi + rcx]
-	sub eax, ebx
+_return_cmp:
+	movzx rax, BYTE[rdi + rcx]
+	movzx rdx, BYTE[rsi + rcx]
+	sub rax, rdx
 	xor rcx, rcx
-	xor rbx, rbx
+	xor rdx, rdx
 	ret
