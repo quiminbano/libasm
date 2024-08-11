@@ -3,25 +3,26 @@ section .text
 
 ft_strcmp:
 	xor rcx, rcx
+	xor rdx, rdx
 
 loop_cmp:
 	mov al, [rdi + rcx]
-	mov bl, [rsi + rcx]
+	mov dl, [rsi + rcx]
 	cmp al, 0
 	je return_cmp
-	cmp bl, 0
+	cmp dl, 0
 	je return_cmp
-	cmp al, bl
+	cmp al, dl
 	jne return_cmp
 	inc rcx
 	jmp loop_cmp
 
 return_cmp:
-	movzx eax, BYTE[rdi + rcx]
-	movzx ebx, BYTE[rsi + rcx]
-	sub eax, ebx
+	movzx rax, BYTE[rdi + rcx]
+	movzx rdx, BYTE[rsi + rcx]
+	sub rax, rdx
 	xor rcx, rcx
-	xor rbx, rbx
+	xor rdx, rdx
 	ret
 
 section .note.GNU-stack

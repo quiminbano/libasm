@@ -11,9 +11,6 @@ ft_atoi_base:
 	je return_zero_atoi_base
 
 return_zero_atoi_base:
-	xor rcx, rcx
-	xor rbx, rbx
-	xor rdx, rdx
 	xor rax, rax
 	ret
 
@@ -55,7 +52,7 @@ loop_for_spaces_and_symbols:
 
 check_repeated_char_base:
 	movzx rsi, BYTE[rdi + rcx]
-	xor rbx, rbx
+	xor r8, r8
 	xor rdx, rdx
 	cmp rsi, 0
 	je return_zero_atoi_base
@@ -66,17 +63,17 @@ check_repeated_char_base:
 	jmp check_repeated_char_base
 
 loop_for_repeated_char:
-	mov al, [rdi + rbx]
-	cmp al, 0
+	movzx rax, [rdi + r8]
+	cmp rax, 0
 	je return_zero_atoi_base
-	inc rbx
-	cmp al, rsi
+	inc r8
+	cmp rax, rsi
 	jne loop_for_repeated_char
 	inc rdx
 	cmp rdx, 2
 	jl loop_for_repeated_char
 	xor rcx, rcx
-	xor rbx, rbx
+	xor r8, r8
 	xor rdx, rdx
 	jmp return_one_atoi_base
 

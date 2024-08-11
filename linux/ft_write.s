@@ -15,14 +15,17 @@ success_write:
 
 error_write:
 	neg rax
-	mov rbx, rax
+	push rdi
+	mov rdi, rax
 	call __errno_location wrt ..plt
 	test rax, rax
 	jz error_protection_write
-	mov [rax], rbx
+	mov [rax], rdi
+	pop rdi
 	mov rax, -1
 	ret
 
 error_protection_write:
+	pop rdi
 	xor rax, rax
 	ret
