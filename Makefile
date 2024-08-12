@@ -6,7 +6,7 @@
 #    By: corellan <corellan@student.hive.fi>        +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/08/07 18:35:00 by corellan          #+#    #+#              #
-#    Updated: 2024/08/09 19:48:11 by corellan         ###   ########.fr        #
+#    Updated: 2024/08/12 15:55:29 by corellan         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -25,7 +25,12 @@ endif
 SRC = $(addprefix $(FOLDER), ft_strlen.s ft_strcpy.s ft_strcmp.s ft_write.s \
 ft_read.s ft_strdup.s)
 
+SRC_BONUS = $(addprefix $(FOLDER), ft_strlen.s ft_strcpy.s ft_strcmp.s \
+ft_write.s ft_read.s ft_strdup.s ft_atoi_base_bonus.s)
+
 OBJ = $(patsubst $(FOLDER)%.s, obj/%.o, $(SRC))
+
+OBJ_BONUS = $(patsubst $(FOLDER)%.s, obj/%.o, $(SRC))
 
 LIB = ar -rcs
 
@@ -34,11 +39,18 @@ all: $(NAME)
 $(NAME): $(OBJ)
 	$(LIB) $(NAME) $(OBJ)
 
+bonus: .bonus
+
+.bonus: $(OBJ_BONUS)
+	$(LIB) $(NAME) $(OBJ)
+	@touch .bonus
+
 obj/%.o: $(FOLDER)%.s
 	@mkdir -p obj/
 	$(NASM) $< -o $@
 
 clean:
+	@rm -f .bonus
 	rm -f $(OBJ)
 	rm -rf obj/
 
