@@ -159,7 +159,7 @@ ft_issign:
 	jmp return_zero_atoi_base
 
 return_base_index_loop:
-	mov rax, [rsi + rcx]
+	movzx rax, BYTE[rsi + rcx]
 	cmp rax, 0
 	je return_base_index
 	cmp rax, rdi
