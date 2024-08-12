@@ -1,3 +1,5 @@
+default rel
+
 section .text
 	global ft_atoi_base
 	extern ft_strlen
