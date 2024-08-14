@@ -5,6 +5,8 @@ section .text
 ft_list_push_front:
 	test rsi, rsi
 	jz no_context_push_front
+	test rdi, rdi
+	jz no_context_push_front
 	push rdi
 	mov rdi, rsi
 	call ft_create_elem
