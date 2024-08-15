@@ -6,23 +6,23 @@ ft_atoi_base:
 	push rbp
 	mov rbp, rsp
 	sub rsp, 24
-	push rdi ; -32
+	push rdi
 	mov rdi, rsi
 	call ft_strlen
-	pop rdi ; -24
+	pop rdi
 	cmp rax, 2
 	jl return_zero_atoi_base
-	mov QWORD[rsp], rax ; first 8 bytes length
-	push rdi ; -32, so strlen is in +8
+	mov QWORD[rsp], rax
+	push rdi
 	mov rdi, rsi
 	call validate_base_atoi
-	pop rdi ; -24
+	pop rdi
 	test rax, rax
 	jz return_zero_atoi_base
 	mov rax, 1
-	mov QWORD[rsp + 8], rax ; sign
+	mov QWORD[rsp + 8], rax
 	mov rax, 0
-	mov QWORD[rsp + 16], rax ; number prev step
+	mov QWORD[rsp + 16], rax
 	xor rax, rax
 
 loop_spaces_atoi_base:
@@ -227,10 +227,5 @@ return_base_index:
 	pop rbp
 	mov rax, rcx
 	ret
-
-section .bss
-	sign resq 1
-	length_base resq 1
-	number_prev_step resq 1
 
 section .note.GNU-stack
