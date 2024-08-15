@@ -1,5 +1,3 @@
-default rel
-
 section .text
 	global _ft_atoi_base
 	extern _ft_strlen
@@ -12,9 +10,9 @@ _ft_atoi_base:
 	test rax, rax
 	jz _return_zero_atoi_base
 	mov rax, 1
-	mov [sign], rax
+	mov [rel sign], rax
 	mov rax, 0
-	mov [number_prev_step], rax
+	mov [rel number_prev_step], rax
 	xor rax, rax
 
 _loop_spaces_atoi_base:
@@ -41,7 +39,7 @@ _loop_signs_atoi_base:
 	cmp rax, 43
 	je _loop_signs_atoi_base
 	mov rax, -1
-	mov [sign], rax
+	mov [rel sign], rax
 	xor rax, rax
 	jmp _loop_signs_atoi_base
 
@@ -56,23 +54,23 @@ _calculate_number_atoi_base:
 	call _return_base_index_loop
 	pop rcx
 	pop rdi
-	cmp rax, [length_base]
+	cmp rax, [rel length_base]
 	je _return_calculated_number_atoi_base
 	push rax
-	mov rax, [number_prev_step]
+	mov rax, [rel number_prev_step]
 	xor rdx, rdx
-	imul rax, [length_base]
-	mov [number_prev_step], rax
+	imul rax, [rel length_base]
+	mov [rel number_prev_step], rax
 	pop rax
-	add rax, [number_prev_step]
-	mov [number_prev_step], rax
+	add rax, [rel number_prev_step]
+	mov [rel number_prev_step], rax
 	inc rcx
 	jmp _calculate_number_atoi_base
 
 _return_calculated_number_atoi_base:
-	mov rax, [number_prev_step]
+	mov rax, [rel number_prev_step]
 	xor rdx, rdx
-	imul rax, [sign]
+	imul rax, [rel sign]
 	ret
 
 _return_zero_atoi_base:
@@ -87,7 +85,7 @@ _validate_base_atoi:
 	call _ft_strlen
 	cmp rax, 2
 	jl _return_zero_atoi_base
-	mov [length_base], rax
+	mov [rel length_base], rax
 	call _loop_for_spaces_and_symbols
 	xor rcx, rcx
 	test rax, rax
