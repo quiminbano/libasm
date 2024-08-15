@@ -3,16 +3,26 @@ section .text
 	extern ft_strlen
 
 ft_atoi_base:
-	push rdi
+	push rbp
+	mov rbp, rsp
+	sub rsp, 24
+	push rdi ; -32
+	mov rdi, rsi
+	call ft_strlen
+	pop rdi ; -24
+	cmp rax, 2
+	jl return_zero_atoi_base
+	mov QWORD[rsp], rax ; first 8 bytes length
+	push rdi ; -32, so strlen is in +8
 	mov rdi, rsi
 	call validate_base_atoi
-	pop rdi
+	pop rdi ; -24
 	test rax, rax
 	jz return_zero_atoi_base
 	mov rax, 1
-	mov [rel sign], rax
+	mov QWORD[rsp + 8], rax ; sign
 	mov rax, 0
-	mov [rel number_prev_step], rax
+	mov QWORD[rsp + 16], rax ; number prev step
 	xor rax, rax
 
 loop_spaces_atoi_base:
@@ -39,7 +49,7 @@ loop_signs_atoi_base:
 	cmp rax, 43
 	je loop_signs_atoi_base
 	mov rax, -1
-	mov [rel sign], rax
+	mov QWORD[rsp + 8], rax
 	xor rax, rax
 	jmp loop_signs_atoi_base
 
@@ -54,45 +64,53 @@ calculate_number_atoi_base:
 	call return_base_index_loop
 	pop rcx
 	pop rdi
-	cmp rax, [rel length_base]
+	cmp rax, QWORD[rsp + 8]
 	je return_calculated_number_atoi_base
 	push rax
-	mov rax, [rel number_prev_step]
+	mov rax, QWORD[rsp + 16]
 	xor rdx, rdx
-	imul rax, [length_base]
-	mov [rel number_prev_step], rax
+	imul rax, QWORD[rsp]
+	mov QWORD[rsp + 16], rax
 	pop rax
-	add rax, [rel number_prev_step]
-	mov [rel number_prev_step], rax
+	add rax, QWORD[rsp + 16]
+	mov QWORD[rsp + 16], rax
 	inc rcx
 	jmp calculate_number_atoi_base
 
 return_calculated_number_atoi_base:
-	mov rax, [rel number_prev_step]
+	mov rax, QWORD[rsp + 16]
 	xor rdx, rdx
-	imul rax, [rel sign]
+	imul rax, QWORD[rsp]
+	add rsp, 24
+	mov rsp, rbp
+	pop rbp
 	ret
 
 return_zero_atoi_base:
+	add rsp, 24
+	mov rsp, rbp
+	pop rbp
 	xor rax, rax
 	ret
 
 return_one_atoi_base:
+	add rsp, 24
+	mov rsp, rbp
+	pop rbp
 	mov rax, 1
 	ret
 
 validate_base_atoi:
-	call ft_strlen
-	cmp rax, 2
-	jl return_zero_atoi_base
-	mov [rel length_base], rax
+	push rbp
+	mov rbp, rsp
+	sub rsp, 24
 	call loop_for_spaces_and_symbols
 	xor rcx, rcx
 	test rax, rax
 	jnz return_zero_atoi_base
-	push rsi
+	push rsi ; -32
 	call check_repeated_char_base
-	pop rsi
+	pop rsi ; -24
 	xor rcx, rcx
 	xor r8, r8
 	xor rdx, rdx
@@ -101,6 +119,9 @@ validate_base_atoi:
 	jmp return_one_atoi_base
 
 loop_for_spaces_and_symbols:
+	push rbp
+	mov rbp, rsp
+	sub rsp, 24
 	mov al, [rdi + rcx]
 	cmp al, 43
 	je return_one_atoi_base
@@ -115,10 +136,16 @@ loop_for_spaces_and_symbols:
 	inc rcx
 	mov al, [rdi + rcx]
 	cmp al, 0
-	jne loop_for_spaces_and_symbols
-	jmp return_zero_atoi_base
+	je return_zero_atoi_base
+	add rsp, 24
+	mov rsp, rbp
+	pop rbp
+	jmp loop_for_spaces_and_symbols
 
 check_repeated_char_base:
+	push rbp
+	mov rbp, rsp
+	sub rsp, 24
 	movzx rsi, BYTE[rdi + rcx]
 	xor r8, r8
 	xor rdx, rdx
@@ -128,21 +155,39 @@ check_repeated_char_base:
 	test rax, rax
 	jnz return_one_atoi_base
 	inc rcx
+	add rsp, 24
+	mov rsp, rbp
+	pop rbp
 	jmp check_repeated_char_base
 
 loop_for_repeated_char:
+	push rbp
+	mov rbp, rsp
+	sub rsp, 24
 	movzx rax, BYTE[rdi + r8]
 	cmp rax, 0
 	je return_zero_atoi_base
 	inc r8
+	add rsp, 24
+	mov rsp, rbp
+	pop rbp
 	cmp rax, rsi
 	jne loop_for_repeated_char
+	push rbp
+	mov rbp, rsp
+	sub rsp, 24
 	inc rdx
 	cmp rdx, 2
-	jl loop_for_repeated_char
-	jmp return_one_atoi_base
+	jge return_one_atoi_base
+	add rsp, 24
+	mov rsp, rbp
+	pop rbp
+	jmp loop_for_repeated_char
 
 ft_isspace:
+	push rbp
+	mov rbp, rsp
+	sub rsp, 24
 	cmp rdi, 32
 	je return_one_atoi_base
 	cmp rdi, 14
@@ -152,6 +197,9 @@ ft_isspace:
 	jmp return_one_atoi_base
 
 ft_issign:
+	push rbp
+	mov rbp, rsp
+	sub rsp, 24
 	cmp rdi, 43
 	je return_one_atoi_base
 	cmp rdi, 45
@@ -159,15 +207,24 @@ ft_issign:
 	jmp return_zero_atoi_base
 
 return_base_index_loop:
+	push rbp
+	mov rbp, rsp
+	sub rsp, 24
 	movzx rax, BYTE[rsi + rcx]
 	cmp rax, 0
 	je return_base_index
 	cmp rax, rdi
 	je return_base_index
 	inc rcx
+	add rsp, 24
+	mov rsp, rbp
+	pop rbp
 	jmp return_base_index_loop
 
 return_base_index:
+	add rsp, 24
+	mov rsp, rbp
+	pop rbp
 	mov rax, rcx
 	ret
 
