@@ -64,13 +64,13 @@ calculate_number_atoi_base:
 	call return_base_index_loop
 	pop rcx
 	pop rdi
-	cmp rax, QWORD[rsp + 8]
+	cmp rax, QWORD[rsp]
 	je return_calculated_number_atoi_base
-	push rax
-	mov rax, QWORD[rsp + 16]
+	push rax ; push rax moves everthing 8 spaces. So length_base is 8, Sign is 16 and prev_number is 24
+	mov rax, QWORD[rsp + 24]
 	xor rdx, rdx
-	imul rax, QWORD[rsp]
-	mov QWORD[rsp + 16], rax
+	imul rax, QWORD[rsp + 8]
+	mov QWORD[rsp + 24], rax
 	pop rax
 	add rax, QWORD[rsp + 16]
 	mov QWORD[rsp + 16], rax
@@ -80,7 +80,7 @@ calculate_number_atoi_base:
 return_calculated_number_atoi_base:
 	mov rax, QWORD[rsp + 16]
 	xor rdx, rdx
-	imul rax, QWORD[rsp]
+	imul rax, QWORD[rsp + 8]
 	add rsp, 24
 	mov rsp, rbp
 	pop rbp
