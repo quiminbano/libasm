@@ -6,7 +6,7 @@
 #    By: corellan <corellan@student.hive.fi>        +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/08/07 18:35:00 by corellan          #+#    #+#              #
-#    Updated: 2024/08/16 14:46:20 by corellan         ###   ########.fr        #
+#    Updated: 2024/08/16 14:49:02 by corellan         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -27,7 +27,7 @@ ft_read.s ft_strdup.s)
 
 SRC_BONUS = $(addprefix $(FOLDER), ft_strlen.s ft_strcpy.s ft_strcmp.s \
 ft_write.s ft_read.s ft_strdup.s ft_atoi_base_bonus.s \
-ft_list_push_front_bonus.s ft_list_size_bonus.s, ft_list_remove_if_bonus.s)
+ft_list_push_front_bonus.s ft_list_size_bonus.s ft_list_remove_if_bonus.s)
 
 OBJ = $(patsubst $(FOLDER)%.s, obj/%.o, $(SRC))
 
