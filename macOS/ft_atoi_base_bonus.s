@@ -3,6 +3,16 @@ section .text
 	extern _ft_strlen
 
 _ft_atoi_base:
+	push rbp
+	mov rbp, rsp
+	sub rsp, 24
+	push rdi
+	mov rdi, rsi
+	call _ft_strlen
+	pop rdi
+	cmp rax, 2
+	jl _return_zero_atoi_base
+	mov QWORD[rsp], rax
 	push rdi
 	mov rdi, rsi
 	call _validate_base_atoi
@@ -10,9 +20,9 @@ _ft_atoi_base:
 	test rax, rax
 	jz _return_zero_atoi_base
 	mov rax, 1
-	mov [rel sign], rax
+	mov QWORD[rsp + 8], rax
 	mov rax, 0
-	mov [rel number_prev_step], rax
+	mov QWORD[rsp + 16], rax
 	xor rax, rax
 
 _loop_spaces_atoi_base:
@@ -39,7 +49,7 @@ _loop_signs_atoi_base:
 	cmp rax, 43
 	je _loop_signs_atoi_base
 	mov rax, -1
-	mov [rel sign], rax
+	mov QWORD[rsp + 8], rax
 	xor rax, rax
 	jmp _loop_signs_atoi_base
 
@@ -54,45 +64,53 @@ _calculate_number_atoi_base:
 	call _return_base_index_loop
 	pop rcx
 	pop rdi
-	cmp rax, [rel length_base]
+	cmp rax, QWORD[rsp]
 	je _return_calculated_number_atoi_base
-	push rax
-	mov rax, [rel number_prev_step]
+	push rax ; push rax moves everthing 8 spaces. So length_base is 8, Sign is 16 and prev_number is 24
+	mov rax, QWORD[rsp + 24]
 	xor rdx, rdx
-	imul rax, [rel length_base]
-	mov [rel number_prev_step], rax
+	imul rax, QWORD[rsp + 8]
+	mov QWORD[rsp + 24], rax
 	pop rax
-	add rax, [rel number_prev_step]
-	mov [rel number_prev_step], rax
+	add rax, QWORD[rsp + 16]
+	mov QWORD[rsp + 16], rax
 	inc rcx
 	jmp _calculate_number_atoi_base
 
 _return_calculated_number_atoi_base:
-	mov rax, [rel number_prev_step]
+	mov rax, QWORD[rsp + 16]
 	xor rdx, rdx
-	imul rax, [rel sign]
+	imul rax, QWORD[rsp + 8]
+	add rsp, 24
+	mov rsp, rbp
+	pop rbp
 	ret
 
 _return_zero_atoi_base:
+	add rsp, 24
+	mov rsp, rbp
+	pop rbp
 	xor rax, rax
 	ret
 
 _return_one_atoi_base:
+	add rsp, 24
+	mov rsp, rbp
+	pop rbp
 	mov rax, 1
 	ret
 
 _validate_base_atoi:
-	call _ft_strlen
-	cmp rax, 2
-	jl _return_zero_atoi_base
-	mov [rel length_base], rax
+	push rbp
+	mov rbp, rsp
+	sub rsp, 24
 	call _loop_for_spaces_and_symbols
 	xor rcx, rcx
 	test rax, rax
 	jnz _return_zero_atoi_base
-	push rsi
+	push rsi ; -32
 	call _check_repeated_char_base
-	pop rsi
+	pop rsi ; -24
 	xor rcx, rcx
 	xor r8, r8
 	xor rdx, rdx
@@ -101,6 +119,9 @@ _validate_base_atoi:
 	jmp _return_one_atoi_base
 
 _loop_for_spaces_and_symbols:
+	push rbp
+	mov rbp, rsp
+	sub rsp, 24
 	mov al, [rdi + rcx]
 	cmp al, 43
 	je _return_one_atoi_base
@@ -115,10 +136,16 @@ _loop_for_spaces_and_symbols:
 	inc rcx
 	mov al, [rdi + rcx]
 	cmp al, 0
-	jne _loop_for_spaces_and_symbols
-	jmp _return_zero_atoi_base
+	je _return_zero_atoi_base
+	add rsp, 24
+	mov rsp, rbp
+	pop rbp
+	jmp _loop_for_spaces_and_symbols
 
 _check_repeated_char_base:
+	push rbp
+	mov rbp, rsp
+	sub rsp, 24
 	movzx rsi, BYTE[rdi + rcx]
 	xor r8, r8
 	xor rdx, rdx
@@ -128,21 +155,39 @@ _check_repeated_char_base:
 	test rax, rax
 	jnz _return_one_atoi_base
 	inc rcx
+	add rsp, 24
+	mov rsp, rbp
+	pop rbp
 	jmp _check_repeated_char_base
 
 _loop_for_repeated_char:
+	push rbp
+	mov rbp, rsp
+	sub rsp, 24
 	movzx rax, BYTE[rdi + r8]
 	cmp rax, 0
 	je _return_zero_atoi_base
 	inc r8
+	add rsp, 24
+	mov rsp, rbp
+	pop rbp
 	cmp rax, rsi
 	jne _loop_for_repeated_char
+	push rbp
+	mov rbp, rsp
+	sub rsp, 24
 	inc rdx
 	cmp rdx, 2
-	jl _loop_for_repeated_char
-	jmp _return_one_atoi_base
+	jge _return_one_atoi_base
+	add rsp, 24
+	mov rsp, rbp
+	pop rbp
+	jmp _loop_for_repeated_char
 
 _ft_isspace:
+	push rbp
+	mov rbp, rsp
+	sub rsp, 24
 	cmp rdi, 32
 	je _return_one_atoi_base
 	cmp rdi, 14
@@ -152,6 +197,9 @@ _ft_isspace:
 	jmp _return_one_atoi_base
 
 _ft_issign:
+	push rbp
+	mov rbp, rsp
+	sub rsp, 24
 	cmp rdi, 43
 	je _return_one_atoi_base
 	cmp rdi, 45
@@ -159,19 +207,23 @@ _ft_issign:
 	jmp _return_zero_atoi_base
 
 _return_base_index_loop:
+	push rbp
+	mov rbp, rsp
+	sub rsp, 24
 	movzx rax, BYTE[rsi + rcx]
 	cmp rax, 0
 	je _return_base_index
 	cmp rax, rdi
 	je _return_base_index
 	inc rcx
+	add rsp, 24
+	mov rsp, rbp
+	pop rbp
 	jmp _return_base_index_loop
 
 _return_base_index:
+	add rsp, 24
+	mov rsp, rbp
+	pop rbp
 	mov rax, rcx
 	ret
-
-section .bss
-	sign resq 1
-	length_base resq 1
-	number_prev_step resq 1
