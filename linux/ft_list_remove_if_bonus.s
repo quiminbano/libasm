@@ -87,3 +87,5 @@ prepare_return_list:
 return_void_list_remove_if:
 	xor rax, rax
 	ret
+
+section .note.GNU-stack
