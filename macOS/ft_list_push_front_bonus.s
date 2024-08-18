@@ -3,8 +3,6 @@ section .text
 	extern _malloc
 
 _ft_list_push_front:
-	test rsi, rsi
-	jz _no_context_push_front
 	test rdi, rdi
 	jz _no_context_push_front
 	push rdi

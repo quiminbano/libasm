@@ -24,68 +24,64 @@ ft_atoi_base:
 	mov rax, 0
 	mov QWORD[rsp + 16], rax
 	xor rax, rax
-
-loop_spaces_atoi_base:
-	mov al, [rdi + rcx]
-	push rdi
-	movzx rdi, BYTE al
-	call ft_isspace
-	pop rdi
-	test rax, rax
-	jz loop_signs_atoi_base
-	inc rcx
-	jmp loop_spaces_atoi_base
-
-loop_signs_atoi_base:
-	mov al, [rdi + rcx]
-	push rdi
-	movzx rdi, BYTE al
-	call ft_issign
-	pop rdi
-	test rax, rax
-	jz calculate_number_atoi_base
-	movzx rax, BYTE[rdi + rcx]
-	inc rcx
-	cmp rax, 43
-	je loop_signs_atoi_base
-	mov rax, -1
-	mov QWORD[rsp + 8], rax
-	xor rax, rax
-	jmp loop_signs_atoi_base
-
-calculate_number_atoi_base:
-	movzx rax, BYTE[rdi + rcx]
-	cmp rax, 0
-	je return_calculated_number_atoi_base
-	push rdi
-	push rcx
-	xor rcx, rcx
-	mov rdi, rax
-	call return_base_index_loop
-	pop rcx
-	pop rdi
-	cmp rax, QWORD[rsp]
-	je return_calculated_number_atoi_base
-	push rax ; push rax moves everthing 8 spaces. So length_base is 8, Sign is 16 and prev_number is 24
-	mov rax, QWORD[rsp + 24]
-	xor rdx, rdx
-	imul rax, QWORD[rsp + 8]
-	mov QWORD[rsp + 24], rax
-	pop rax
-	add rax, QWORD[rsp + 16]
-	mov QWORD[rsp + 16], rax
-	inc rcx
-	jmp calculate_number_atoi_base
-
-return_calculated_number_atoi_base:
-	mov rax, QWORD[rsp + 16]
-	xor rdx, rdx
-	imul rax, QWORD[rsp + 8]
-	add rsp, 24
-	mov rsp, rbp
-	pop rbp
-	ret
-
+	loop_spaces_atoi_base:
+		mov al, [rdi + rcx]
+		push rdi
+		movzx rdi, BYTE al
+		call ft_isspace
+		pop rdi
+		test rax, rax
+		jz loop_signs_atoi_base
+		inc rcx
+		jmp loop_spaces_atoi_base
+	loop_signs_atoi_base:
+		mov al, [rdi + rcx]
+		push rdi
+		movzx rdi, BYTE al
+		call ft_issign
+		pop rdi
+		test rax, rax
+		jz calculate_number_atoi_base
+		movzx rax, BYTE[rdi + rcx]
+		inc rcx
+		cmp rax, 43
+		je loop_signs_atoi_base
+		mov rax, -1
+		mov QWORD[rsp + 8], rax
+		xor rax, rax
+		jmp loop_signs_atoi_base
+	calculate_number_atoi_base:
+		movzx rax, BYTE[rdi + rcx]
+		cmp rax, 0
+		je return_calculated_number_atoi_base
+		push rdi
+		push rcx
+		xor rcx, rcx
+		mov rdi, rax
+		call return_base_index_loop
+		pop rcx
+		pop rdi
+		cmp rax, QWORD[rsp]
+		je return_calculated_number_atoi_base
+		push rax ; push rax moves everthing 8 spaces. So length_base is 8, Sign is 16 and prev_number is 24
+		mov rax, QWORD[rsp + 24]
+		xor rdx, rdx
+		imul rax, QWORD[rsp + 8]
+		mov QWORD[rsp + 24], rax
+		pop rax
+		add rax, QWORD[rsp + 16]
+		mov QWORD[rsp + 16], rax
+		inc rcx
+		jmp calculate_number_atoi_base
+	return_calculated_number_atoi_base:
+		mov rax, QWORD[rsp + 16]
+		xor rdx, rdx
+		imul rax, QWORD[rsp + 8]
+		add rsp, 24
+		mov rsp, rbp
+		pop rbp
+		ret
+	
 return_zero_atoi_base:
 	add rsp, 24
 	mov rsp, rbp
@@ -220,12 +216,11 @@ return_base_index_loop:
 	mov rsp, rbp
 	pop rbp
 	jmp return_base_index_loop
-
-return_base_index:
-	add rsp, 24
-	mov rsp, rbp
-	pop rbp
-	mov rax, rcx
-	ret
+	return_base_index:
+		add rsp, 24
+		mov rsp, rbp
+		pop rbp
+		mov rax, rcx
+		ret
 
 section .note.GNU-stack
