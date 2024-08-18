@@ -6,7 +6,7 @@
 #    By: corellan <corellan@student.hive.fi>        +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/08/07 18:35:00 by corellan          #+#    #+#              #
-#    Updated: 2024/08/18 09:12:17 by corellan         ###   ########.fr        #
+#    Updated: 2024/08/18 17:04:49 by corellan         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -19,7 +19,7 @@ ifeq ($(OS), Darwin)
 	NASM = nasm -f macho64
 else
 	FOLDER = linux/
-	NASM = nasm -f elf64 -gdwarf
+	NASM = nasm -f elf64
 endif
 
 SRC = $(addprefix $(FOLDER), ft_strlen.s ft_strcpy.s ft_strcmp.s ft_write.s \
@@ -54,6 +54,7 @@ obj/%.o: $(FOLDER)%.s
 clean:
 	@rm -f .bonus
 	rm -f $(OBJ)
+	rm -f $(OBJ_BONUS)
 	rm -rf obj/
 
 fclean: clean

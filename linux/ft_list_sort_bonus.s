@@ -30,7 +30,6 @@ ft_list_sort:
 	pop rsi
 	push rsi
 	lea rdi, [rsp + 32]
-	mov rdi, QWORD[rsp + 32]
 	call ft_list_sort
 	pop rsi
 	push rsi
@@ -100,14 +99,14 @@ merge_lists:
 	test rsi, rsi
 	jz return_rdi
 	push rbp
-	mov rsp, rbp
+	mov rbp, rsp
 	sub rsp, 8
 	mov QWORD[rsp], 0
 	push rdi
 	push rsi
 	push rdx
 	mov rdi, QWORD[rdi]
-	mov rsi, QWORD[rdi]
+	mov rsi, QWORD[rsi]
 	call rdx
 	pop rdx
 	pop rsi

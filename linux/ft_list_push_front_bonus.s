@@ -3,8 +3,6 @@ section .text
 	extern malloc
 
 ft_list_push_front:
-	test rsi, rsi
-	jz no_context_push_front
 	test rdi, rdi
 	jz no_context_push_front
 	push rdi
@@ -38,3 +36,5 @@ ft_create_elem:
 no_context_push_front:
 	xor rax, rax
 	ret
+
+section .note.GNU-stack
