@@ -11,7 +11,7 @@ _loop_list_size:
 	test rdi, rdi
 	jz _return_list_size
 	inc rcx
-	mov rdi, [rdi + 8]
+	mov rdi, QWORD[rdi + 8]
 	jmp _loop_list_size
 
 _return_list_size:

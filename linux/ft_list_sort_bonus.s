@@ -2,9 +2,9 @@ section .text
 	global ft_list_sort
 
 ft_list_sort:
-	test rsi, rsi
-	jz return_nothing_list_merge ; returns ; if t_list ** is NULL
 	test rdi, rdi
+	jz return_nothing_list_merge ; returns ; if t_list ** is NULL
+	test rsi, rsi
 	jz return_nothing_list_merge ; returns ; if the cmp function pointer is NULL
 	mov rax, QWORD[rdi]
 	test rax, rax
@@ -153,3 +153,5 @@ merge_lists:
 	return_rdi:
 		mov rax, rdi
 		ret
+
+section .note.GNU-stack
