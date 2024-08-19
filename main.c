@@ -6,7 +6,7 @@
 /*   By: corellan <corellan@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/19 12:08:54 by corellan          #+#    #+#             */
-/*   Updated: 2024/08/19 15:07:54 by corellan         ###   ########.fr       */
+/*   Updated: 2024/08/19 17:01:37 by corellan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,7 +44,8 @@ int	main(void)
 
 	test = NULL;
 	return_atoi = ft_atoi_base("---ff", "0123456789abcdef");
-	printf("RETURN ATOI_BASE: %d\n", return_atoi);
+	if (return_atoi == -255)
+		printf("RETURN ATOI_BASE: %d\n", return_atoi);
 	str = ft_strdup("milk");
 	ft_list_push_front(&test, str);
 	str = ft_strdup("bread");
