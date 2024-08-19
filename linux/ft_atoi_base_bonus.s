@@ -24,6 +24,7 @@ ft_atoi_base:
 	mov rax, 0
 	mov QWORD[rsp + 16], rax
 	xor rax, rax
+	xor rdx, rdx
 	loop_spaces_atoi_base:
 		mov al, [rdi + rcx]
 		push rdi
@@ -41,15 +42,21 @@ ft_atoi_base:
 		call ft_issign
 		pop rdi
 		test rax, rax
-		jz calculate_number_atoi_base
+		jz check_minus_counter
 		movzx rax, BYTE[rdi + rcx]
 		inc rcx
 		cmp rax, 43
 		je loop_signs_atoi_base
-		mov rax, -1
-		mov QWORD[rsp + 8], rax
+		inc rdx
 		xor rax, rax
 		jmp loop_signs_atoi_base
+	check_minus_counter:
+		test rdx, 1
+		jz clear_rdx_and_continue
+		mov rax, -1
+		mov QWORD[rsp + 8], rax
+	clear_rdx_and_continue:
+		xor rdx, rdx
 	calculate_number_atoi_base:
 		movzx rax, BYTE[rdi + rcx]
 		cmp rax, 0

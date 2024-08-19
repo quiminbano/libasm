@@ -106,17 +106,19 @@ _merge_lists:
 	push rdx
 	mov rdi, QWORD[rdi]
 	mov rsi, QWORD[rsi]
+	xor rax, rax
 	call rdx
 	pop rdx
 	pop rsi
 	pop rdi
-	cmp rax, 1
+	cmp eax, 1
 	jge _resolve_b
 	mov QWORD[rsp], rdi
 	push rsi
 	push rdx
 	push rdi
 	mov rdi, QWORD[rdi + 8]
+	xor rax, rax
 	call _merge_lists
 	mov rdi, QWORD[rsp + 24]
 	mov QWORD[rdi + 8], rax

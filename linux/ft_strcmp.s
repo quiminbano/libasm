@@ -18,9 +18,11 @@ loop_cmp:
 	jmp loop_cmp
 
 return_cmp:
-	movzx rax, BYTE[rdi + rcx]
-	movzx rdx, BYTE[rsi + rcx]
-	sub rax, rdx
+	xor rax, rax
+	xor rdx, rdx
+	movzx eax, BYTE[rdi + rcx]
+	movzx edx, BYTE[rsi + rcx]
+	sub eax, edx
 	xor rcx, rcx
 	xor rdx, rdx
 	ret
