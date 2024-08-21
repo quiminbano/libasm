@@ -1,5 +1,12 @@
 #!/bin/bash
 
+function delete_outputs()
+{
+	if [ -d "outputs" ]; then
+		rm -rf outputs
+	fi
+}
+
 function run_test_function()
 {
 	if [ ! -d "outputs" ]; then
@@ -92,8 +99,18 @@ function detect_test()
 	fi
 }
 
+function create_folder_or_clear_logs()
+{
+	if [ ! -d "logs" ]; then
+		mkdir -p logs
+	else
+		rm -f logs/*
+	fi
+}
+
 string1=""
 isFound=false
+create_folder_or_clear_logs
 if [ $# -eq 0 ]; then
 	string1="all"
 elif [ $# -eq 1 ]; then
@@ -119,4 +136,5 @@ if [ "$isFound" == false ]; then
 fi
 compile_library
 detect_test "$string1"
+delete_outputs
 clean_library

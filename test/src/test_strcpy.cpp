@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   test_strlen.cpp                                    :+:      :+:    :+:   */
+/*   test_strcpy.cpp                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: corellan <corellan@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/20 14:11:47 by corellan          #+#    #+#             */
-/*   Updated: 2024/08/21 22:48:02 by corellan         ###   ########.fr       */
+/*   Updated: 2024/08/21 23:06:49 by corellan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,7 +43,8 @@ static void	signal_handler(int sig)
 	std::exit(0);
 }
 
-static void	create_log(size_t &result_ft, size_t &result_orig, int &nbr)
+static void	create_log(const std::string &result_ft, const std::string &result_orig, \
+char *ptr_ft, char *ptr_orig, char *real_ptr_ft, char *real_ptr_orig, int &nbr)
 {
 	std::ofstream		file;
 	std::ostringstream	oss;
@@ -58,14 +59,18 @@ static void	create_log(size_t &result_ft, size_t &result_orig, int &nbr)
 		file << "TEST CASE NUMBER " << nbr << ".\n\n";
 	if (nbr == 4)
 	{
-		file << "YOUR FT_STRLEN FUNCTION DIDN'T CRASH WHEN IT SHOULD CRASH.\n\n";
+		file << "YOUR FT_STRCPY FUNCTION DIDN'T CRASH WHEN IT SHOULD CRASH.\n\n";
 		file << "REMEMBER THAT OVERPROTECTION OF YOUR FUNCTIONS MAKES MORE DIFFICULT FOR YOU TO\n";
 		file << "DEBUG YOUR CODE IN CASE OF AN ERROR.\n";
 	}
 	else
 	{
-		file << "YOUR FT_STRLEN GOT AS RESULT: " << result_ft << "\n";
+		file << "YOUR FT_STRCPY GOT AS RESULT: " << result_ft << "\n";
 		file << "IT MUST GET: " << result_orig << "\n";
+		file << "PTR OBTAINED FROM FT_STRCPY: " << ptr_ft << "\n";
+		file << "IT MUST GET: " << real_ptr_ft << "\n";
+		file << "ORIGINAL FUNCTION RETURN AS PTR: " << ptr_orig << "\n";
+		file << "AND IT GETS: " << real_ptr_orig << "\n";
 	}
 	file.close();
 	return ;
@@ -83,56 +88,64 @@ static void	print_test_and_test_number(int &nbr)
 
 static void	process_test(char const *nbr_str)
 {
-	int		nbr;
-	int		*ptr;
-	size_t	result_ft;
-	size_t	result_orig;
+	int			nbr;
+	int			*ptr;
+	char		result_ft[14];
+	char		result_orig[14];
+	char		*ptr_ft;
+	char		*ptr_orig;
+	std::string	str_ft;
+	std::string	str_orig;
 
 	signal(SIGSEGV, &signal_handler);
 	nbr = std::stoi(nbr_str);
-	result_ft = 0;
-	result_orig = 0;
+	bzero(result_ft, sizeof(result_ft));
+	bzero(result_orig, sizeof(result_orig));
 	print_test_and_test_number(nbr);
 	switch (nbr)
 	{
 	case 1:
-		result_ft = ft_strlen("Hello, World\n");
-		result_orig = std::strlen("Hello, World\n");
+		ptr_ft = ft_strcpy(result_ft, "Hello, World\n");
+		ptr_orig = std::strcpy(result_orig, "Hello, World\n");
 		break;
 	case 2:
-		result_ft = ft_strlen("Hello\0,World\n");
-		result_orig = std::strlen("Hello\0,World\n");
+		ptr_ft = ft_strcpy(result_ft, "Hello\0 World\n");
+		ptr_orig = std::strcpy(result_orig, "Hello\0 World\n");
 		break;
 	case 3:
-		result_ft = ft_strlen("");
-		result_orig = std::strlen("");
+		ptr_ft = ft_strcpy(result_ft, "");
+		ptr_orig = std::strcpy(result_orig, "");
 		break;
 	case 4:
 		ptr = get_status();
 		*ptr = 1;
-		result_orig = std::strlen(nullptr);
+		ptr_orig = std::strcpy(result_orig, nullptr);
 		break;
 	case 5:
 		ptr = get_status();
 		*ptr = 2;
-		result_ft = ft_strlen(nullptr);
+		ptr_ft = ft_strcpy(result_ft, nullptr);
 		break;
 	default:
 		std::cerr << "Error\n";
 		break;
 	}
+	str_ft = result_ft;
+	str_orig = result_orig;
 	if (nbr == 4)
 	{
 		std::cout << YELLOW << "[NO-CRASH]" << RESET " -> ";
 		std::cout << RED << "[KO]" << RESET << "\n";
-		create_log(result_ft, result_orig, nbr);
+		create_log(str_ft, str_orig, ptr_ft, ptr_orig, &(result_ft[0]), \
+			&(result_orig[0]), nbr);
 	}
-	else if (result_ft == result_orig)
+	else if (str_ft == str_orig && (ptr_ft == &(result_ft[0])) && (ptr_orig == &(result_orig[0])))
 		std::cout << GREEN << "[OK]" << RESET << "\n";
 	else
 	{
 		std::cout << RED << "[KO]" << RESET << "\n";
-		create_log(result_ft, result_orig, nbr);
+		create_log(result_ft, result_orig, ptr_ft, ptr_orig,  &(result_ft[0]), \
+			&(result_orig[0]), nbr);
 	}
 }
 
