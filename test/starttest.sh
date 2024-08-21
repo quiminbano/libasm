@@ -5,13 +5,15 @@ function run_test_function()
 	if [ ! -d "outputs" ]; then
 		mkdir -p outputs
 	fi
-	if c++ -Wall -Wextra -Werror -std=c++11 src/test_"$1".cpp -L.. -lasm -o test_"$1" &> /dev/null; then
-		for i in $(seq 1 "$2")
-			./test_"$1" $i
-			usleep 50000
+	if c++ -Wall -Wextra -Werror -Wno-nonnull -std=c++11 src/test_"$1".cpp -L.. -lasm -Iinclude -o outputs/test_"$1" &> /dev/null ; then
+		for i in $(seq 1 "$2"); do
+			./outputs/test_"$1" $i
+			sleep 0.05
+		done
+		rm -f outputs/test_"$1"
 	else
 		echo "[ERROR COMPILING THE TEST]"
-		usleep 50000
+		sleep 0.05
 	fi
 }
 
@@ -21,7 +23,7 @@ function run_mandatory()
 	numberOftestsPerTest=(5 5 1 1 1 1)
 	index=0
 	for instruction in "${individualTests[@]}"; do
-		run_test_function "$instruction" "$numberOftestsPerTest[$index]"
+		run_test_function "$instruction" "${numberOftestsPerTest[$index]}"
 		index=$((test + 1))
 	done
 }
@@ -33,22 +35,22 @@ function run_bonus()
 	numberOftestsPerTest=(1 1 1 1 1)
 	index=0
 	for instruction in "${individualTests[@]}"; do
-		run_test_function "$instruction" "$numberOftestsPerTest[$index]"
+		run_test_function "$instruction" "${numberOftestsPerTest[$index]}"
 		index=$((test + 1))
 	done
 }
 
-function clean_library()
+function compile_library()
 {
-	if make -C ..; then
+	if ! make -C ..; then
 		echo "libasmTester: Invalid compilation of the Makefile"
 		exit 1
 	fi
 }
 
-function compile_library()
+function clean_library()
 {
-	if make fclean -C ..; then
+	if ! make fclean -C ..; then
 		echo "libasmTester: the tester couldn't run the rule fclean from your Makefile"
 		exit 1
 	fi
@@ -79,7 +81,7 @@ function detect_test()
 	else
 		for instruction in "${individualTests[@]}"; do
 			if [ "$instruction" == $1 ]; then
-				run_test_function "$instruction" "$numberOftestsPerTest[$index]"
+				run_test_function "$instruction" "${numberOftestsPerTest[$index]}"
 				break
 			fi
 			index=$((index + 1))

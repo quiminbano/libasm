@@ -6,7 +6,7 @@
 /*   By: corellan <corellan@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/20 14:11:47 by corellan          #+#    #+#             */
-/*   Updated: 2024/08/21 10:55:21 by corellan         ###   ########.fr       */
+/*   Updated: 2024/08/21 17:19:25 by corellan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,10 @@
 #include <sstream>
 #include <cstring>
 #include <csignal>
-#include "libasm.h"
+extern "C"
+{
+	#include "libasm.h"
+}
 
 static int	*get_status(void)
 {
@@ -87,17 +90,21 @@ static void	process_test(char const *nbr_str)
 	case 2:
 		result_ft = ft_strlen("Hello\0,World\n");
 		result_ft = std::strlen("Hello\0,World\n");
+		break;
 	case 3:
 		result_ft = ft_strlen("");
 		result_ft = std::strlen("");
+		break;
 	case 4:
 		ptr = get_status();
 		*ptr = 1;
-		result_ft = ft_strlen(NULL);
+		result_ft = ft_strlen(nullptr);
+		break;
 	case 5:
 		ptr = get_status();
 		*ptr = 1;
-		result_ft = std::strlen(NULL);
+		result_ft = std::strlen(nullptr);
+		break;
 	default:
 		std::cerr << "Error\n";
 		break;
@@ -114,6 +121,6 @@ static void	process_test(char const *nbr_str)
 int	main(int ac, char **av)
 {
 	if (ac == 2)
-		process_test(av[2]);
+		process_test(av[1]);
 	return (0);
 }
