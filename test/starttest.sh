@@ -5,14 +5,17 @@ function run_test_function()
 	if [ ! -d "outputs" ]; then
 		mkdir -p outputs
 	fi
-	if c++ -Wall -Wextra -Werror -Wno-nonnull -std=c++11 src/test_"$1".cpp -L.. -lasm -Iinclude -o outputs/test_"$1" &> /dev/null ; then
+	echo -e "\033[1;37m\nft_$1\033[0m"
+	if c++ -Wall -Wextra -Werror -Wno-nonnull -arch x86_64 -std=c++11 \
+	src/test_"$1".cpp -Iinclude -L.. -lasm -o \
+	outputs/test_"$1" &> /dev/null ; then
 		for i in $(seq 1 "$2"); do
 			./outputs/test_"$1" $i
 			sleep 0.05
 		done
 		rm -f outputs/test_"$1"
 	else
-		echo "[ERROR COMPILING THE TEST]"
+		echo -e "\033[0;31m[ERROR COMPILING THE TEST]\033[0m"
 		sleep 0.05
 	fi
 }
