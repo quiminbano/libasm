@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   test_strcpy.cpp                                    :+:      :+:    :+:   */
+/*   test_strcmp.cpp                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: corellan <corellan@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/20 14:11:47 by corellan          #+#    #+#             */
-/*   Updated: 2024/08/22 13:18:47 by corellan         ###   ########.fr       */
+/*   Updated: 2024/08/22 13:39:43 by corellan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,34 +43,39 @@ static void	signal_handler(int sig)
 	std::exit(0);
 }
 
-static void	create_log(const std::string &result_ft, const std::string &result_orig, \
-char *ptr_ft, char *ptr_orig, char *real_ptr_ft, char *real_ptr_orig, int &nbr)
+static void	create_log(int &nbr, int &result_orig, int &result_ft)
 {
 	std::ofstream		file;
 	std::ostringstream	oss;
 
-	oss << "logs/ft_strcpy" << nbr << ".txt";
+	if (nbr <= 7)
+		oss << "logs/ft_strcmp" << nbr << ".txt";
+	else if (nbr == 8)
+		oss << "logs/ft_strcmp" << 7 << ".txt";
+	else if (nbr == 10)
+		oss << "logs/ft_strcmp" << 8 << ".txt";
 	file.open(oss.str(), std::ios_base::out);
 	if (file.fail())
 	{
 		std::cerr << "Error trying to create/modify the file\n";
 		return ;
 	}
+	if (nbr <= 7)
 		file << "TEST CASE NUMBER " << nbr << ".\n\n";
-	if (nbr == 4)
+	else if (nbr == 8)
+		file << "TEST CASE NUMBER " << 7 << ".\n\n";
+	else if (nbr == 10)
+		file << "TEST CASE NUMBER " << 8 << ".\n\n";
+	if (nbr == 8 || nbr == 10)
 	{
-		file << "YOUR FT_STRCPY FUNCTION DIDN'T CRASH WHEN IT SHOULD CRASH.\n\n";
+		file << "YOUR FT_STRCMP FUNCTION DIDN'T CRASH WHEN IT SHOULD CRASH.\n\n";
 		file << "REMEMBER THAT OVERPROTECTION OF YOUR FUNCTIONS MAKES MORE DIFFICULT FOR YOU TO\n";
 		file << "DEBUG YOUR CODE IN CASE OF AN ERROR.\n";
 	}
 	else
 	{
-		file << "YOUR FT_STRCPY GOT AS RESULT: " << result_ft << "\n";
-		file << "IT MUST GET: " << result_orig << "\n";
-		file << "PTR OBTAINED FROM FT_STRCPY: " << ptr_ft << "\n";
-		file << "IT MUST GET: " << real_ptr_ft << "\n";
-		file << "ORIGINAL FUNCTION RETURN AS PTR: " << ptr_orig << "\n";
-		file << "AND IT GETS: " << real_ptr_orig << "\n";
+		file << "YOUR FT_STRCMP GOT AS RESULT: " << result_ft << "\n";
+		file << "THE ORIGINAL ONE GETS: " << result_orig << "\n";
 	}
 	file.close();
 	return ;
@@ -78,11 +83,13 @@ char *ptr_ft, char *ptr_orig, char *real_ptr_ft, char *real_ptr_orig, int &nbr)
 
 static void	print_test_and_test_number(int &nbr)
 {
-	if (nbr != 5)
+	if (nbr <= 7)
 		std::cout << "Test " << nbr << ": ";
-	if (nbr == 4)
+	else if (nbr == 9)
+		std::cout << "Test " << 8 << ": ";
+	if (nbr == 7 || nbr == 9)
 		std::cout << "ORIGINAL: ";
-	if (nbr == 5)
+	if (nbr == 8 | nbr == 10)
 		std::cout << "YOURS: ";
 }
 
@@ -90,62 +97,84 @@ static void	process_test(char const *nbr_str)
 {
 	int			nbr;
 	int			*ptr;
-	char		result_ft[14];
-	char		result_orig[14];
-	char		*ptr_ft;
-	char		*ptr_orig;
-	std::string	str_ft;
-	std::string	str_orig;
+	int			result_orig;
+	int			result_ft;
+	bool		is_correct;
 
 	signal(SIGSEGV, &signal_handler);
 	nbr = std::stoi(nbr_str);
-	bzero(result_ft, sizeof(result_ft));
-	bzero(result_orig, sizeof(result_orig));
+	result_orig = 0;
+	result_ft = 0;
+	is_correct = false;
 	print_test_and_test_number(nbr);
 	switch (nbr)
 	{
 	case 1:
-		ptr_ft = ft_strcpy(result_ft, "Hello, World\n");
-		ptr_orig = std::strcpy(result_orig, "Hello, World\n");
+		result_ft = ft_strcmp("Hello, World\n", "Hello, World\n");
+		result_orig = std::strcmp("Hello, World\n", "Hello, World\n");
+		is_correct = (result_ft == 0 && result_orig == 0);
 		break;
 	case 2:
-		ptr_ft = ft_strcpy(result_ft, "Hello\0 World\n");
-		ptr_orig = std::strcpy(result_orig, "Hello\0 World\n");
+		result_ft = ft_strcmp("hello, World\n", "Hello, World\n");
+		result_orig = std::strcmp("hello, World\n", "Hello, World\n");
+		is_correct = (result_ft > 0 && result_orig > 0);
 		break;
 	case 3:
-		ptr_ft = ft_strcpy(result_ft, "");
-		ptr_orig = std::strcpy(result_orig, "");
+		result_ft = ft_strcmp("\0hello, World\n", "\0Hello, World\n");
+		result_orig = std::strcmp("\0hello, World\n", "\0Hello, World\n");
+		is_correct = (result_ft == 0 && result_orig == 0);
 		break;
 	case 4:
-		ptr = get_status();
-		*ptr = 1;
-		ptr_orig = std::strcpy(result_orig, nullptr);
+		result_ft = ft_strcmp("Hello, World\n", "Iello, World\n");
+		result_orig = std::strcmp("Hello, World\n", "Iello, World\n");
+		is_correct = (result_ft < 0 && result_orig < 0);
 		break;
 	case 5:
+		result_ft = ft_strcmp("Hello, World\n", "Hello, World\nini");
+		result_orig = std::strcmp("Hello, World\n", "Hello, World\nini");
+		is_correct = (result_ft < 0 && result_orig < 0);
+		break;
+	case 6:
+		result_ft = ft_strcmp("Hello, World\n\0a", "Hello, World\n\0and");
+		result_orig = std::strcmp("Hello, World\n\0a", "Hello, World\n\0and");
+		is_correct = (result_ft == 0 && result_orig == 0);
+		break;
+	case 7:
+		ptr = get_status();
+		*ptr = 1;
+		result_orig = std::strcmp("Hello\n", nullptr);
+		break;
+	case 8:
 		ptr = get_status();
 		*ptr = 2;
-		ptr_ft = ft_strcpy(result_ft, nullptr);
+		result_ft = ft_strcmp("Hello\n", nullptr);
+		break;
+	case 9:
+		ptr = get_status();
+		*ptr = 1;
+		result_orig = std::strcmp(nullptr, "Hello\n");
+		break;
+	case 10:
+		ptr = get_status();
+		*ptr = 2;
+		result_ft = ft_strcmp(nullptr, "Hello\n");
 		break;
 	default:
 		std::cerr << "Error\n";
 		break;
 	}
-	str_ft = result_ft;
-	str_orig = result_orig;
-	if (nbr == 4)
+	if (nbr == 8 || nbr == 10)
 	{
 		std::cout << YELLOW << "[NO-CRASH]" << RESET " -> ";
 		std::cout << RED << "[KO]" << RESET << "\n";
-		create_log(str_ft, str_orig, ptr_ft, ptr_orig, &(result_ft[0]), \
-			&(result_orig[0]), nbr);
+		create_log(nbr, result_orig, result_ft);
 	}
-	else if (str_ft == str_orig && (ptr_ft == &(result_ft[0])) && (ptr_orig == &(result_orig[0])))
+	else if (is_correct == true)
 		std::cout << GREEN << "[OK]" << RESET << "\n";
 	else
 	{
 		std::cout << RED << "[KO]" << RESET << "\n";
-		create_log(result_ft, result_orig, ptr_ft, ptr_orig,  &(result_ft[0]), \
-			&(result_orig[0]), nbr);
+		create_log(nbr, result_orig, result_ft);
 	}
 }
 

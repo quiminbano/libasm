@@ -18,23 +18,23 @@ function run_test_function()
 	outputs/test_"$1" &> /dev/null ; then
 		for i in $(seq 1 "$2"); do
 			./outputs/test_"$1" $i
-			sleep 0.05
+			sleep 0.1
 		done
 		rm -f outputs/test_"$1"
 	else
 		echo -e "\033[0;31m[ERROR COMPILING THE TEST]\033[0m"
-		sleep 0.05
+		sleep 0.1
 	fi
 }
 
 function run_mandatory()
 {
 	individualTests=("strlen" "strcpy" "strcmp" "write" "read" "strdup")
-	numberOftestsPerTest=(5 5 1 1 1 1)
+	numberOftestsPerTest=(5 5 10 1 1 1)
 	index=0
 	for instruction in "${individualTests[@]}"; do
 		run_test_function "$instruction" "${numberOftestsPerTest[$index]}"
-		index=$((test + 1))
+		index=$((index + 1))
 	done
 }
 
@@ -46,16 +46,8 @@ function run_bonus()
 	index=0
 	for instruction in "${individualTests[@]}"; do
 		run_test_function "$instruction" "${numberOftestsPerTest[$index]}"
-		index=$((test + 1))
+		index=$((index + 1))
 	done
-}
-
-function compile_library()
-{
-	if ! make -C ..; then
-		echo "libasmTester: Invalid compilation of the Makefile"
-		exit 1
-	fi
 }
 
 function clean_library()
@@ -66,12 +58,25 @@ function clean_library()
 	fi
 }
 
+function compile_library()
+{
+	if [ "$1" == "mandatory" ]; then
+		make -C ..
+	else
+		make bonus -C ..
+	fi
+	if [ $? -ne 0 ]; then
+		echo "libasmTester: Invalid compilation of the Makefile"
+		exit 1
+	fi
+}
+
 function detect_test()
 {
 	globalInstructions=("all" "mandatory" "bonus")
 	individualTests=("strlen" "strcpy" "strcmp" "write" "read" "strdup" \
 	"atoi_base" "list_size" "list_push_front" "list_sort" "list_delete_if")
-	numberOftestsPerTest=(5 5 1 1 1 1 1 1 1 1 1)
+	numberOftestsPerTest=(5 5 10 1 1 1 1 1 1 1 1)
 	isInGlobal=false
 	testName=""
 	index=0
@@ -82,15 +87,24 @@ function detect_test()
 		fi
 	done
 	if [ "$isInGlobal" == true ] && [ "$1" == "all" ]; then
+		compile_library "mandatory"
 		run_mandatory
+		compile_library "bonus"
 		run_bonus
 	elif [ "$isInGlobal" == true ] && [ "$1" == "mandatory" ]; then
+		compile_library "mandatory"
 		run_mandatory
 	elif [ "$isInGlobal" == true ] && [ "$1" == "bonus" ]; then
+		compile_library "bonus"
 		run_bonus
 	else
 		for instruction in "${individualTests[@]}"; do
 			if [ "$instruction" == $1 ]; then
+				if [ $index -ge 6 ]; then
+					compile_library "bonus"
+				else
+					compile_library "mandatory"
+				fi
 				run_test_function "$instruction" "${numberOftestsPerTest[$index]}"
 				break
 			fi
@@ -134,7 +148,6 @@ if [ "$isFound" == false ]; then
 	echo "libasmTester: invalid argument."
 	exit 1
 fi
-compile_library
 detect_test "$string1"
 delete_outputs
 clean_library
