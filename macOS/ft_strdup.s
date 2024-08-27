@@ -20,6 +20,7 @@ _ft_strdup:
 	ret
 
 _malloc_protection_dup:
+	pop rdi
 	xor rax, rax
 	ret
 
