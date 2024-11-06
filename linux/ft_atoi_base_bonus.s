@@ -1,6 +1,7 @@
 section .text
 	global ft_atoi_base
 	extern ft_strlen
+	extern ft_isspace
 
 ft_atoi_base:
 	push rbp
@@ -186,18 +187,6 @@ loop_for_repeated_char:
 	mov rsp, rbp
 	pop rbp
 	jmp loop_for_repeated_char
-
-ft_isspace:
-	push rbp
-	mov rbp, rsp
-	sub rsp, 24
-	cmp rdi, 32
-	je return_one_atoi_base
-	cmp rdi, 14
-	jge return_zero_atoi_base
-	cmp rdi, 8
-	jle return_zero_atoi_base
-	jmp return_one_atoi_base
 
 ft_issign:
 	push rbp

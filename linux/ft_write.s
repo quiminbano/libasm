@@ -29,3 +29,5 @@ error_protection_write:
 	pop rdi
 	xor rax, rax
 	ret
+
+section .note.GNU-stack
