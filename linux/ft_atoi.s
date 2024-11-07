@@ -64,7 +64,7 @@ check_neg_overflow_atoi:
 	pop rbp
 	ret
 return_pos_overflow_atoi:
-	xor rax, 0 ; This becomes LONG_MIN stored in rax into LONG_MAX
+	xor rax, 0xFFFFFFFFFFFFFFFF ; This becomes LONG_MIN stored in rax into LONG_MAX
 	add rsp, 32
 	mov rsp, rbp
 	pop rbp
